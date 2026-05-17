@@ -1,5 +1,17 @@
 from pygame import *
 from random import randint
+import sys
+import os
+
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS 
+    except Exception:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
+
+
+
 
 class GameSprite(sprite.Sprite):
     def __init__(self, png, x, y, speed):
@@ -8,7 +20,7 @@ class GameSprite(sprite.Sprite):
         self.x = x
         self.y = y
         self.speed = speed
-        self.image = transform.scale(image.load(self.png), (60, 60))
+        self.image = transform.scale(image.load(resource_path(self.png)), (60, 60))
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
@@ -28,7 +40,7 @@ class Player(GameSprite):
             self.rect.x += self.speed
     def fire(self):
         for bullet in range(3):
-            bullets.add(Bullet('bullet.png', player.rect.centerx, player.rect.top, 5))
+            bullets.add(Bullet('assets/bullet.png', player.rect.centerx, player.rect.top, 5))
 
 
 class Enemy(GameSprite):
@@ -48,18 +60,18 @@ class Bullet(GameSprite):
 
 
 
-player = Player('rocket.png', 330, 427, 6)
+player = Player('assets/rocket.png', 330, 427, 6)
 
 
 w = display.set_mode((700, 500))
 display.set_caption('Шутер')
-background = transform.scale(image.load('Black_Hole.jpg'), (700, 500))
+background = transform.scale(image.load(resource_path('assets/Black_Hole.jpg')), (700, 500))
 
 bullets = sprite.Group()
 monsters = sprite.Group()
 
 for monster in range(5):
-    monsters.add(Enemy('ufo.png', randint(60,640), randint(10,40), randint(1,2)))
+    monsters.add(Enemy('assets/ufo.png', randint(60,640), randint(10,40), randint(1,2)))
 
 game = True
 finish = False
